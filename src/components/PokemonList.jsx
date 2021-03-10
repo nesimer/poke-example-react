@@ -5,11 +5,14 @@ const PokemonList = () => {
   const [pokemons, setPokemons] = useState([]);
 
   return (
-    <ul className="pkmnList">
-      {pokemons.map(pkmn => (
-        <li key={pkmn.id}>{pkmn.name}</li>
-      ))}
-    </ul>
+    <>
+      <h1>Pokemons list</h1>
+      <ul className="pkmnList">
+        {pokemons.map(pkmn => (
+          <li key={pkmn.id}>{pkmn.name}</li>
+        ))}
+      </ul>
+    </>
   );
 };
 
