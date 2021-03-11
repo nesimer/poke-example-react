@@ -1,25 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Axios from 'axios'
+import { usePokemonContext } from '../contexts/PokemonContext'
 
-const Pokemon = ({ pokemonUrl }) => {
-  const [pokemon, setPokemon] = useState(undefined)
+const Pokemon = () => {
+  const { state, dispatch } = usePokemonContext()
+  const { selectedUrl, selectedPokemon } = state
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await Axios.get(pokemonUrl)
-      setPokemon(data)
+      const { data: pokemon } = await Axios.get(selectedUrl)
+      dispatch({ type: 'setSelectedPokemonDetails', data: { pokemon } })
     }
     fetchData()
-  }, [pokemonUrl])
+  }, [selectedUrl, dispatch])
 
-  return pokemon ? (
+  return selectedPokemon.id ? (
     <div>
-      <img src={pokemon.sprites.back_default} />
-      <img src={pokemon.sprites.front_default} />
-      <p><b>ID:</b> {pokemon.id}</p>
-      <p><b>NAME:</b> {pokemon.name}</p>
+      <img alt={`${selectedPokemon.name} back`} src={selectedPokemon.sprites.back_default} />
+      <img alt={`${selectedPokemon.name} front`} src={selectedPokemon.sprites.front_default} />
+      <p><b>ID:</b> {selectedPokemon.id}</p>
+      <p><b>NAME:</b> {selectedPokemon.name}</p>
     </div>
-  ) : 'Loading...'
+  ) : "En cours de chargement..."
 }
 
 export default Pokemon

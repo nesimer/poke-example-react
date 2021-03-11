@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import './PokemonList.css'
-import { usePokemonContext } from '../contexts/PokemonContext';
-import { Link } from 'react-router-dom'
 
-const PokemonItem = ({ pkmn }) => {
-  const { state, dispatch } = usePokemonContext()
-
-  const selectedName = state?.selectedPokemon?.name
-  const handleClick = () => {
-    dispatch({ type: 'setSelected', data: { selected: pkmn } })
-  }
-
-  return <li className={pkmn.name === selectedName ? 'selected' : ''} onClick={handleClick}>
-    <Link to={`/pokemons/${pkmn.name}`}>{pkmn.name}</Link>
-  </li >
+const PokemonItem = ({ pkmn, onClickHandler, isSelected }) => {
+  return <li className={isSelected ? 'selected' : ''} onClick={onClickHandler}>
+    {pkmn.name}
+  </li>
 }
 
-const PokemonList = () => {
+const PokemonList = ({ onSelectOne }) => {
   const [pokemons, setPokemons] = useState([]);
+  const [selected, setSelected] = useState('')
   const [next, setNext] = useState(undefined);
   const [previous, setPrevious] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,13 +28,17 @@ const PokemonList = () => {
     fetchData()
   }, [url])
 
+  useEffect(() => {
+    onSelectOne(selected)
+  }, [selected])
+
   return (
     <div>
       <h1>Pokemons list</h1>
       <ul className="pkmnList">
         {isLoading && "... Loading ..."}
         {!isLoading && pokemons.map(pkmn => (
-          <PokemonItem key={pkmn.name} pkmn={pkmn} />
+          <PokemonItem key={pkmn.name} pkmn={pkmn} isSelected={selected.name === pkmn.name} onClickHandler={() => { setSelected(pkmn) }} />
         ))}
       </ul>
       <div style={{ display: 'inline' }}>
