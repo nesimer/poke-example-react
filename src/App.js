@@ -7,8 +7,8 @@ import {
 } from 'react-router-dom'
 import PokemonContext from './contexts/PokemonContext';
 import pokemonReducer from './reducers/pokemonReducer';
-import Pokemon from './components/Pokemon'
 import PokemonList from './components/PokemonList';
+import Pokemon from './components/Pokemon';
 
 const App = () => {
   const [state, dispatch] = useReducer(pokemonReducer, {})
